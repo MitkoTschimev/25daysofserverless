@@ -1,0 +1,24 @@
+{
+  "npmScope": "days-of-serverless",
+  "implicitDependencies": {
+    "angular.json": "*",
+    "package.json": "*",
+    "tsconfig.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "projects": {
+    "days-of-serverless-e2e": {
+      "tags": []
+    },
+    "days-of-serverless": {
+      "tags": []
+    },
+    "api": {
+      "tags": []
+    },
+    "api-interfaces": {
+      "tags": []
+    }
+  }
+}
