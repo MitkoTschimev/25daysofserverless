@@ -1,0 +1,98 @@
+{
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "actions": {
+      "Compose": {
+        "inputs": "@outputs('Execute_JavaScript_Code')?['body']",
+        "runAfter": {
+          "Execute_JavaScript_Code": ["Succeeded"]
+        },
+        "type": "compose"
+      },
+      "Current_time": {
+        "inputs": {},
+        "kind": "CurrentTime",
+        "runAfter": {},
+        "type": "Expression"
+      },
+      "Execute_JavaScript_Code": {
+        "inputs": {
+          "code": "var currentTime = workflowContext.actions.Current_time.outputs.body;\r\nvar text = '';\r\nvar minute = (new Date(currentTime)).getMinutes();\r\nswitch(minute) {\r\n    case 0:\r\n        text = \"start the coffee, set out 4 cups\";\r\n        break;\r\n    case 25:\r\n        text = \"pour two cups\";\r\n        break;\r\n    case 30:\r\n        text = \"light the candles\";\r\n        break;\r\n    case 35:\r\n        text = \"deliver the coffee to Mom and Dad\";\r\n        break;\r\n    case 39:\r\n        text = \"return to kitchen, fill two more cups\";\r\n        break;\r\n    case 40:\r\n        text = \"relight the candles\";\r\n        break;\r\n    case 45:\r\n        text = \"deliver the coffee to Sister and Brother\";\r\n        break;\r\n    case 49:\r\n        text = \"return to kitchen, take a break!\";\r\n        break;\r\n    default:\r\n        text = minute;\r\n}\r\n\r\nreturn text;"
+        },
+        "runAfter": {
+          "Current_time": ["Succeeded"]
+        },
+        "type": "JavaScriptCode"
+      },
+      "Send_Text_Message_(SMS)": {
+        "inputs": {
+          "body": {
+            "body": "@{outputs('Compose')}",
+            "from": "TRELLOS_PHONE_NUMBER",
+            "to": "MY_PHONE_NUMBER"
+          },
+          "host": {
+            "connection": {
+              "name": "@parameters('$connections')['twilio']['connectionId']"
+            }
+          },
+          "method": "post",
+          "path": "/Messages.json"
+        },
+        "runAfter": {
+          "Compose": ["Succeeded"]
+        },
+        "runtimeConfiguration": {
+          "staticResult": {
+            "name": "Send_Text_Message_(SMS)0",
+            "staticResultOptions": "Disabled"
+          }
+        },
+        "type": "ApiConnection"
+      }
+    },
+    "contentVersion": "1.0.0.0",
+    "outputs": {},
+    "parameters": {
+      "$connections": {
+        "defaultValue": {},
+        "type": "Object"
+      }
+    },
+    "staticResults": {
+      "Send_Text_Message_(SMS)0": {
+        "outputs": {
+          "headers": {},
+          "statusCode": "OK"
+        },
+        "status": "Succeeded"
+      }
+    },
+    "triggers": {
+      "Recurrence": {
+        "recurrence": {
+          "frequency": "Day",
+          "interval": 1,
+          "schedule": {
+            "hours": ["8"],
+            "minutes": [0, 25, 30, 35, 39, 40, 45, 49]
+          },
+          "startTime": "2019-12-13T08:00:00Z",
+          "timeZone": "W. Europe Standard Time"
+        },
+        "type": "recurrence"
+      }
+    }
+  },
+  "parameters": {
+    "$connections": {
+      "value": {
+        "twilio": {
+          "connectionId": "/subscriptions/90a008fc-abaf-46af-bb00-28d66e75c465/resourceGroups/daysofserverless/providers/Microsoft.Web/connections/twilio",
+          "connectionName": "twilio",
+          "id": "/subscriptions/90a008fc-abaf-46af-bb00-28d66e75c465/providers/Microsoft.Web/locations/northeurope/managedApis/twilio"
+        }
+      }
+    }
+  }
+}
