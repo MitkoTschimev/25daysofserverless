@@ -28,10 +28,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ env.NODE_VERSION }}
-    - name: 'Login via Azure CLI'
-      uses: Azure/actions/login@master
-      with:
-        creds: ${{ secrets.SCM_CREDENTIALS }}
     - name: npm install, deploy:api
       run: |
         # Build and test the project, then
@@ -43,3 +39,4 @@ jobs:
       id: fa
       with:
         app-name: daysofserverless-api
+        publish-profile: ${{ secrets.SCM_CREDENTIALS }}
