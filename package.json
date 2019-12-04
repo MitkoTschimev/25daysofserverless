@@ -41,6 +41,7 @@
     "@angular/platform-browser-dynamic": "^8.2.0",
     "@angular/router": "^8.2.0",
     "@azure/functions": "^1.0.3",
+    "@nestjs/azure-database": "^1.0.0",
     "@nestjs/azure-func-http": "^0.3.1",
     "@nestjs/common": "^6.8.3",
     "@nestjs/core": "^6.8.3",
