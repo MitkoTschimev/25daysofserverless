@@ -9,17 +9,19 @@ export class SecretSantaFurryFriendsService {
     private readonly pictureTable: Repository<PictureEntity>
   ) {}
 
-  sendPicturesToDb(commits: { added: string[] }[], htmlUrlPath: string) {
+  async sendPicturesToDb(commits: { added: string[] }[], htmlUrlPath: string) {
     commits.forEach(commit => {
       commit.added.forEach(filePath => {
         if (filePath.endsWith('.png')) {
-          this.addToDb(`${htmlUrlPath}/blob/master/${filePath}`);
+          return this.addToDb(`${htmlUrlPath}/blob/master/${filePath}`);
         }
       });
     });
   }
 
-  private addToDb(filePath: string) {
-    this.pictureTable.create({ url: filePath });
+  private addToDb(filePath: string): Promise<PictureEntity> {
+    const entity = new PictureEntity();
+    entity.url = filePath;
+    return this.pictureTable.create(entity);
   }
 }

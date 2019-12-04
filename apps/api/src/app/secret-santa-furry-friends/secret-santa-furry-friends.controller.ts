@@ -13,5 +13,6 @@ export class SecretSantaFurryFriendsController {
       payload.commits,
       payload.repository.html_url
     );
+    return '';
   }
 }
