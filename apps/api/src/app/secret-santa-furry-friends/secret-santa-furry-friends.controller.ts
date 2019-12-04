@@ -1,9 +1,17 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { Push } from "github-webhook-event-types";
+import { SecretSantaFurryFriendsService } from './secret-santa-furry-friends.service';
+
 @Controller('secret-santa-furry-friends')
 export class SecretSantaFurryFriendsController {
-  @Post()
-  githubWebhook(@Body() payload: Push) {
+  constructor(
+    private secretSantaFurryFriendsService: SecretSantaFurryFriendsService
+  ) {}
 
+  @Post()
+  githubWebhook(@Body() payload: any) {
+    this.secretSantaFurryFriendsService.sendPicturesToDb(
+      payload.commits,
+      payload.repository.html_url
+    );
   }
 }
