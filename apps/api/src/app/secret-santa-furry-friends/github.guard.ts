@@ -11,7 +11,7 @@ export class GithubGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<HttpRequest>();
 
     return this.calculateSignature(
-      request.headers['X-Hub-Signature'],
+      request.headers['x-hub-signature'],
       request.body,
       process.env.GITHUB_WEBHOOK_SECRET
     );
