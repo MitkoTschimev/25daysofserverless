@@ -9,7 +9,7 @@ export class SecretSantaFurryFriendsService {
     private readonly pictureTable: Repository<PictureEntity>
   ) {}
 
-  async sendPicturesToDb(commits: { added: string[] }[], htmlUrlPath: string) {
+  sendPicturesToDb(commits: { added: string[] }[], htmlUrlPath: string) {
     commits.forEach(commit => {
       commit.added.forEach(filePath => {
         if (filePath.endsWith('.png')) {
