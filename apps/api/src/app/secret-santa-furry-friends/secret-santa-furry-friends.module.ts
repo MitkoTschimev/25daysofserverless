@@ -3,15 +3,18 @@ import { SecretSantaFurryFriendsController } from './secret-santa-furry-friends.
 import { SecretSantaFurryFriendsService } from './secret-santa-furry-friends.service';
 import { AzureTableStorageModule } from '@nestjs/azure-database';
 import { PictureEntity } from './dto/picture.entity';
-import { GithubGuard } from './github.guard';
+import { GithubWebhooksModule } from '@dev-thought/nestjs-github-webhooks';
 
 @Module({
   controllers: [SecretSantaFurryFriendsController],
-  providers: [SecretSantaFurryFriendsService, GithubGuard],
+  providers: [SecretSantaFurryFriendsService],
   imports: [
     AzureTableStorageModule.forFeature(PictureEntity, {
       table: 'SecretSantaFurryFriends',
       createTableIfNotExists: true
+    }),
+    GithubWebhooksModule.forRoot({
+      webhookSecret: process.env.GITHUB_WEBHOOK_SECRET
     })
   ]
 })
